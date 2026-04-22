@@ -1,0 +1,46 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="HeroArena.Login"
+        Width="420"
+        Height="520"
+        Title="HeroArena - Login">
+    <Border Padding="28">
+        <StackPanel VerticalAlignment="Center"
+                    Spacing="14">
+            <TextBlock HorizontalAlignment="Center"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Text="HeroArena" />
+            <TextBlock HorizontalAlignment="Center"
+                       Opacity="0.8"
+                       Text="Connecte-toi pour continuer" />
+            <TextBlock HorizontalAlignment="Center"
+                       FontSize="12"
+                       Opacity="0.7"
+                       Text="Compte par defaut: admin / admin123" />
+
+            <TextBlock Margin="0,12,0,0"
+                       Text="Nom d'utilisateur" />
+            <TextBox x:Name="UsernameTextBox"
+                     PlaceholderText="Entre ton nom" />
+
+            <TextBlock Text="Mot de passe" />
+            <TextBox x:Name="PasswordTextBox"
+                     PasswordChar="*"
+                     PlaceholderText="Entre ton mot de passe" />
+
+            <TextBlock x:Name="ErrorText"
+                       Foreground="Red"
+                       IsVisible="False"
+                       Text="" />
+
+            <Button Margin="0,8,0,0"
+                    HorizontalAlignment="Stretch"
+                    Content="Se connecter"
+                    Click="GoToMain_Click" />
+        </StackPanel>
+    </Border>
+</Window>
