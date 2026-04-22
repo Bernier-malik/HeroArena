@@ -87,3 +87,4 @@
 /home/malik/Documents/cours/b2/C#/HeroArena/obj/Debug/net10.0/HeroArena.pdb
 /home/malik/Documents/cours/b2/C#/HeroArena/obj/Debug/net10.0/HeroArena.genruntimeconfig.cache
 /home/malik/Documents/cours/b2/C#/HeroArena/obj/Debug/net10.0/ref/HeroArena.dll
+/home/malik/Documents/cours/b2/C#/HeroArena/obj/Debug/net10.0/HeroArena.sourcelink.json
