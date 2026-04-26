@@ -1,0 +1,48 @@
+CREATE DATABASE ExerciceHero;
+GO
+
+USE ExerciceHero;
+GO
+
+CREATE TABLE Login (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    Username NVARCHAR(50) NOT NULL,
+    PasswordHash NVARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Player (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(50) NOT NULL,
+    LoginID INT,
+    FOREIGN KEY (LoginID) REFERENCES Login(ID)
+);
+
+CREATE TABLE Hero (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(50) NOT NULL,
+    Health INT NOT NULL,
+    ImageURL NVARCHAR(255) NULL
+);
+
+CREATE TABLE Spell (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(50) NOT NULL,
+    Damage INT NOT NULL,
+    Description NVARCHAR(MAX)
+);
+
+CREATE TABLE PlayerHero (
+    PlayerID INT NOT NULL,
+    HeroID INT NOT NULL,
+    PRIMARY KEY (PlayerID, HeroID),
+    FOREIGN KEY (PlayerID) REFERENCES Player(ID),
+    FOREIGN KEY (HeroID) REFERENCES Hero(ID)
+);
+
+CREATE TABLE HeroSpell (
+    HeroID INT NOT NULL,
+    SpellID INT NOT NULL,
+    PRIMARY KEY (HeroID, SpellID),
+    FOREIGN KEY (HeroID) REFERENCES Hero(ID),
+    FOREIGN KEY (SpellID) REFERENCES Spell(ID)
+);

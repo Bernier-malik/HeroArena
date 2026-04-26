@@ -1,0 +1,550 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        x:CompileBindings="False"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="HeroArena.Main"
+        Width="1400"
+        Height="900"
+        Title="HeroArena - Combat Tour par Tour"
+        Background="#F0F0F0">
+    <TabControl Padding="0" Background="#FFFFFF" Foreground="#000000">
+        <TabControl.Styles>
+            <Style Selector="TabItem">
+                <Setter Property="Foreground" Value="#000000" />
+            </Style>
+            <Style Selector="TabItem:selected">
+                <Setter Property="Foreground" Value="#000000" />
+            </Style>
+        </TabControl.Styles>
+        <!-- ONGLET SETTINGS -->
+        <TabItem Header="⚙ Paramètres">
+            <StackPanel Margin="30" Spacing="16" VerticalAlignment="Center">
+                <TextBlock FontSize="32" FontWeight="Bold" Foreground="#000000">
+                    Configuration Base de Données
+                </TextBlock>
+                
+                <Border Background="#ECF0F1" Padding="16" CornerRadius="8">
+                    <StackPanel Spacing="12">
+                        <TextBlock FontSize="14" Opacity="0.8" Foreground="#000000">
+                            Entrez votre chaîne de connexion SQL Server
+                        </TextBlock>
+                        <TextBox Text="{Binding ConnectionString}" 
+                                 Padding="12" 
+                                 FontSize="13"
+                                 PlaceholderText="Server=...;Database=ExerciceHero;..." />
+                    </StackPanel>
+                </Border>
+
+                <Button Width="300" Height="50" 
+                        Content="💾 Sauvegarder et recharger" 
+                        Command="{Binding SaveConnectionCommand}"
+                        FontSize="16" FontWeight="Bold"
+                        Background="#3498DB" Foreground="#000000" />
+                
+                <TextBlock Opacity="0.6" TextWrapping="Wrap" Foreground="#000000">
+                    Priorité de connexion: 1) Variable d'environnement HEROARENA_DB_CONNECTION 2) Fichier db-connection.txt 3) Valeur par défaut
+                </TextBlock>
+            </StackPanel>
+        </TabItem>
+
+        <!-- ONGLET HEROES -->
+        <TabItem Header="⚔ Héros">
+            <Grid Margin="0" Background="#FAFAFA">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Bouton Rafraîchir -->
+                <Border Grid.Row="0" Background="#3498DB" Padding="20">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button Content="🔄 Rafraîchir les données" 
+                                Command="{Binding RefreshCommand}"
+                                FontSize="14" FontWeight="Bold"
+                                Background="#2980B9" Foreground="#000000"
+                                Padding="16,10" />
+                        <TextBlock VerticalAlignment="Center" 
+                                   Foreground="#000000" 
+                                   FontSize="12" 
+                                   Opacity="0.9">
+                            Nombre de héros: 
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+
+                <!-- Contenu Héros -->
+                <Grid Grid.Row="1" Margin="0" ColumnDefinitions="350,*" Background="#FFFFFF">
+                    <!-- Liste des Héros -->
+                    <Border BorderBrush="#DCE0E5" BorderThickness="0,0,1,0">
+                        <StackPanel>
+                            <TextBlock Margin="20,20,20,10" FontSize="18" FontWeight="Bold" Foreground="#000000">
+                                Liste des Héros
+                            </TextBlock>
+                            <ListBox Margin="10"
+                                     ItemsSource="{Binding Heroes}"
+                                     SelectedItem="{Binding SelectedHero}"
+                                     Background="Transparent"
+                                     BorderThickness="0">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Margin="0,4,0,4" 
+                                                Padding="12" 
+                                                Background="#EBF5FB" 
+                                                CornerRadius="6"
+                                                BorderBrush="#3498DB"
+                                                BorderThickness="0,0,4,0">
+                                            <StackPanel>
+                                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                                    <TextBlock FontWeight="Bold" FontSize="14" Foreground="#000000" Text="{Binding Name}" />
+                                                    <TextBlock FontWeight="Bold" FontSize="14" Foreground="#000000" Text="{Binding Avatar}" />
+                                                </StackPanel>
+                                                <TextBlock FontSize="11" Opacity="0.7" Foreground="#000000">
+                                                    <Run Text="PV: " />
+                                                    <Run Text="{Binding BaseHealth}" />
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Détails Héros -->
+                    <StackPanel Grid.Column="1" Margin="30" Spacing="16">
+                        <StackPanel Spacing="4">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock FontSize="36" FontWeight="Bold" Foreground="#000000" Text="{Binding SelectedHero.Name}" />
+                                <TextBlock FontSize="36" FontWeight="Bold" Foreground="#000000" Text="{Binding SelectedHero.Avatar}" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <Border Background="#FCF3CF" Padding="16" CornerRadius="8" BorderBrush="#F39C12" BorderThickness="2">
+                            <StackPanel Spacing="12">
+                                <TextBlock FontSize="16" FontWeight="Bold" Foreground="#000000">
+                                    ❤ Points de Vie
+                                </TextBlock>
+                                <TextBlock FontSize="24" FontWeight="Bold" Foreground="#000000"
+                                          Text="{Binding SelectedHero.BaseHealth}" />
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock FontSize="18" FontWeight="Bold" Foreground="#000000">
+                            Sorts du Héros
+                        </TextBlock>
+
+                        <ItemsControl ItemsSource="{Binding SelectedHero.Spells}"
+                                      Background="Transparent">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="0,8,0,8" 
+                                            Padding="14" 
+                                            Background="#E8F8F5" 
+                                            CornerRadius="6"
+                                            BorderBrush="#16A085"
+                                            BorderThickness="2">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <StackPanel>
+                                                <TextBlock FontWeight="Bold" FontSize="14" Foreground="#000000"
+                                                          Text="{Binding Name}" />
+                                                <TextBlock FontSize="12" Opacity="0.8"
+                                                          Text="{Binding Description}" />
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1"
+                                                       VerticalAlignment="Center"
+                                                       Spacing="2">
+                                                <TextBlock FontWeight="Bold" 
+                                                          FontSize="16" 
+                                                          Foreground="#000000">
+                                                    <Run Text="⚡ " />
+                                                    <Run Text="{Binding Damage}" />
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <Button Margin="0,16,0,0" 
+                                Height="45" 
+                                Content="🎮 Choisir ce Héros pour le Combat" 
+                                Command="{Binding SelectHeroCommand}"
+                                FontSize="14" FontWeight="Bold"
+                                Background="#27AE60" Foreground="#000000" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </TabItem>
+
+        <!-- ONGLET SPELLS -->
+        <TabItem Header="✨ Sorts">
+            <Grid Margin="0" Background="#FAFAFA">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Filtre Héros -->
+                <Border Grid.Row="0" Background="#9B59B6" Padding="20">
+                    <StackPanel Spacing="12">
+                        <TextBlock Foreground="#000000" FontSize="14" FontWeight="Bold">
+                            Filtrer par Héros:
+                        </TextBlock>
+                        <ComboBox ItemsSource="{Binding HeroFilters}"
+                                  SelectedItem="{Binding SelectedHeroFilter}"
+                                  Padding="12"
+                                  FontSize="13"
+                                  Width="250" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Contenu Spells -->
+                <Grid Grid.Row="1" Margin="0" ColumnDefinitions="350,*" Background="#FFFFFF">
+                    <!-- Liste des Sorts -->
+                    <Border BorderBrush="#DCE0E5" BorderThickness="0,0,1,0">
+                        <StackPanel>
+                            <TextBlock Margin="20,20,20,10" FontSize="18" FontWeight="Bold" Foreground="#000000">
+                                Liste des Sorts
+                            </TextBlock>
+                            <ListBox Margin="10"
+                                     ItemsSource="{Binding Spells}"
+                                     SelectedItem="{Binding SelectedSpell}"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     Foreground="#000000">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Margin="0,4,0,4" 
+                                                Padding="12" 
+                                                Background="#EBF5FB" 
+                                                CornerRadius="6"
+                                                BorderBrush="#3498DB"
+                                                BorderThickness="0,0,4,0">
+                                            <StackPanel Spacing="4">
+                                                <TextBlock FontWeight="Bold" FontSize="14"
+                                                          Foreground="#000000"
+                                                          Text="{Binding Name}" />
+                                                <TextBlock FontSize="12" Foreground="#000000" Opacity="0.8"
+                                                          Text="{Binding Description}" TextWrapping="Wrap" />
+                                                <TextBlock FontSize="11" Opacity="0.7" Foreground="#000000">
+                                                    <Run Text="⚡ " />
+                                                    <Run Text="{Binding Damage}" />
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Détails Sort -->
+                    <StackPanel Grid.Column="1" Margin="30" Spacing="16">
+                        <TextBlock FontSize="32" FontWeight="Bold" Foreground="#000000"
+                                  Text="{Binding SelectedSpell.Name}" />
+
+                        <Border Background="#E8D9F0" Padding="14" CornerRadius="8" BorderBrush="#9B59B6" BorderThickness="2">
+                            <StackPanel Spacing="10">
+                                <TextBlock FontSize="14" Opacity="0.9" Foreground="#000000">
+                                    <Run Text="Héros: " />
+                                    <Run Text="{Binding SelectedSpell.HeroName}" />
+                                </TextBlock>
+                                <StackPanel Spacing="4">
+                                    <TextBlock FontSize="18" FontWeight="Bold" Foreground="#000000">
+                                        <Run Text="⚡ Puissance: " />
+                                        <Run Text="{Binding SelectedSpell.Damage}" />
+                                    </TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock FontSize="16" FontWeight="Bold" Foreground="#000000">
+                            Description
+                        </TextBlock>
+                        <TextBlock FontSize="14" 
+                                   Foreground="#000000"
+                                   TextWrapping="Wrap"
+                                   LineHeight="1.6"
+                                   Text="{Binding SelectedSpell.Description}" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </TabItem>
+
+        <!-- ONGLET COMBAT - STYLE POKEMON -->
+        <TabItem Header="🎮 Combat">
+            <Grid Background="#4A90E2" Margin="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" MinHeight="350"/>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="*" MinHeight="300"/>
+                </Grid.RowDefinitions>
+
+                <!-- ARENE DE COMBAT -->
+                <Border Grid.Row="0" Background="#87CEEB" Padding="20">
+                    <Grid Margin="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                    <!-- ENNEMI (Haut Droit) -->
+                    <StackPanel Grid.Column="1" 
+                               VerticalAlignment="Top" 
+                               HorizontalAlignment="Right"
+                               Margin="20"
+                               Spacing="12">
+                        <Border Background="#FFFFFF" 
+                               Padding="16" 
+                               CornerRadius="8"
+                               BorderBrush="#E74C3C"
+                               BorderThickness="3">
+                            <StackPanel Spacing="8">
+                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                    <TextBlock FontSize="18" 
+                                              FontWeight="Bold" 
+                                              Foreground="#000000"
+                                              Text="ENNEMI - " />
+                                    <TextBlock FontSize="18" 
+                                              FontWeight="Bold" 
+                                              Foreground="#000000"
+                                              Text="{Binding EnemyHero.Name}" />
+                                </StackPanel>
+                                
+                                <!-- Barre HP Ennemi -->
+                                <TextBlock FontSize="12" Opacity="0.7">
+                                    <Run Text="PV: " />
+                                    <Run Text="{Binding EnemyHero.CurrentHealth}" />
+                                    <Run Text="/" />
+                                    <Run Text="{Binding EnemyHero.BaseHealth}" />
+                                </TextBlock>
+                                <ProgressBar Minimum="0"
+                                           Maximum="{Binding EnemyHero.BaseHealth}"
+                                           Value="{Binding EnemyHero.CurrentHealth}"
+                                           Height="20"
+                                           Background="#FFE5E5"
+                                           Foreground="#000000" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Avatar Ennemi -->
+                        <Border Width="140" Height="140" 
+                               Background="#FFEBEE" 
+                               CornerRadius="70"
+                               BorderBrush="#E74C3C"
+                               BorderThickness="3"
+                               HorizontalAlignment="Center">
+                            <TextBlock FontSize="80" 
+                                      HorizontalAlignment="Center" 
+                                      VerticalAlignment="Center"
+                                      Text="{Binding EnemyHero.Avatar}" />
+                        </Border>
+                    </StackPanel>
+
+                    <!-- JOUEUR (Bas Gauche) -->
+                    <StackPanel Grid.Column="0" 
+                               VerticalAlignment="Bottom" 
+                               HorizontalAlignment="Left"
+                               Margin="20"
+                               Spacing="12">
+                        <!-- Avatar Joueur -->
+                        <Border Width="160" Height="160" 
+                               Background="#E3F2FD" 
+                               CornerRadius="80"
+                               BorderBrush="#3498DB"
+                               BorderThickness="4"
+                               HorizontalAlignment="Center">
+                            <TextBlock FontSize="90" 
+                                      HorizontalAlignment="Center" 
+                                      VerticalAlignment="Center"
+                                      Text="{Binding PlayerHero.Avatar}" />
+                        </Border>
+
+                        <Border Background="#FFFFFF" 
+                               Padding="16" 
+                               CornerRadius="8"
+                               BorderBrush="#3498DB"
+                               BorderThickness="3"
+                               Width="340">
+                            <StackPanel Spacing="8">
+                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                    <TextBlock FontSize="18" 
+                                              FontWeight="Bold" 
+                                              Foreground="#000000"
+                                              Text="JOUEUR - " />
+                                    <TextBlock FontSize="18" 
+                                              FontWeight="Bold" 
+                                              Foreground="#000000"
+                                              Text="{Binding PlayerHero.Name}" />
+                                </StackPanel>
+                                
+                                <!-- Barre HP Joueur -->
+                                <TextBlock FontSize="12" Opacity="0.7">
+                                    <Run Text="PV: " />
+                                    <Run Text="{Binding PlayerHero.CurrentHealth}" />
+                                    <Run Text="/" />
+                                    <Run Text="{Binding PlayerHero.BaseHealth}" />
+                                </TextBlock>
+                                <ProgressBar Minimum="0"
+                                           Maximum="{Binding PlayerHero.BaseHealth}"
+                                           Value="{Binding PlayerHero.CurrentHealth}"
+                                           Height="20"
+                                           Background="#E3F2FD"
+                                           Foreground="#000000" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- ZONE DE LOG ET INFORMATIONS -->
+                <Border Grid.Row="1" Background="#2C3E50" Padding="16">
+                    <Grid ColumnDefinitions="*,Auto,Auto,Auto">
+                        <Border Background="#FFFFFF" 
+                               Padding="12" 
+                               CornerRadius="6"
+                               BorderBrush="#34495E"
+                               BorderThickness="1">
+                            <TextBlock FontSize="13" 
+                                      Foreground="#000000"
+                                      TextWrapping="Wrap"
+                                      Text="{Binding CombatLog}" />
+                        </Border>
+
+                        <Border Grid.Column="1" 
+                               Background="#F39C12" 
+                               Padding="12" 
+                               CornerRadius="6"
+                               Margin="12,0,0,0">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock FontSize="11" Opacity="0.8" Foreground="#000000">TOUR</TextBlock>
+                                <TextBlock FontSize="16" 
+                                          FontWeight="Bold" 
+                                          Foreground="#000000"
+                                          Text="{Binding IsPlayerTurn}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="2" 
+                               Background="#27AE60" 
+                               Padding="12" 
+                               CornerRadius="6"
+                               Margin="8,0,0,0">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock FontSize="11" Opacity="0.8" Foreground="#000000">SCORE</TextBlock>
+                                <TextBlock FontSize="18" 
+                                          FontWeight="Bold" 
+                                          Foreground="#000000"
+                                          Text="{Binding Score}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Button Grid.Column="3" 
+                               Content="🔄 Nouveau Combat" 
+                               Command="{Binding NewFightCommand}"
+                               Margin="8,0,0,0"
+                               Background="#E74C3C"
+                               Foreground="#000000"
+                               FontWeight="Bold"
+                               Padding="10" />
+                    </Grid>
+                </Border>
+
+                <!-- SELECTION D'ATTAQUES STYLE POKEMON -->
+                <Grid Grid.Row="2" Background="#FFFFFF" Margin="0" ColumnDefinitions="*,*">
+                    <!-- Liste des Sorts (Partie gauche) -->
+                    <Border Background="#FAFAFA" Padding="16" BorderBrush="#DCE0E5" BorderThickness="0,0,1,0">
+                        <StackPanel Spacing="12">
+                            <TextBlock FontSize="16" FontWeight="Bold" Foreground="#000000">
+                                ⚡ Sélectionne une Attaque:
+                            </TextBlock>
+
+                            <ListBox ItemsSource="{Binding PlayerHero.Spells}" 
+                                    SelectedItem="{Binding SelectedCombatSpell}"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Foreground="#000000">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="14"
+                                               Background="#EBF5FB"
+                                               CornerRadius="8"
+                                               BorderBrush="#3498DB"
+                                               BorderThickness="2"
+                                               Margin="0,6,0,6">
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <StackPanel Spacing="4">
+                                                    <TextBlock FontWeight="Bold" 
+                                                              FontSize="14" 
+                                                              Foreground="#000000"
+                                                              Text="{Binding Name}" />
+                                                    <TextBlock FontSize="12" 
+                                                              Foreground="#000000"
+                                                              Opacity="0.8"
+                                                              Text="{Binding Description}" 
+                                                              TextWrapping="Wrap" />
+                                                </StackPanel>
+                                                <StackPanel Grid.Column="1"
+                                                           VerticalAlignment="Center"
+                                                           Margin="12,0,0,0">
+                                                    <TextBlock FontWeight="Bold"
+                                                              FontSize="16"
+                                                              Foreground="#000000">
+                                                        <Run Text="{Binding Damage}" />
+                                                        <Run Text=" ⚡" />
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Détails & Actions (Partie droite) -->
+                    <StackPanel Grid.Column="1" Margin="30" Spacing="16">
+                        <Border Background="#FCF3CF" Padding="16" CornerRadius="8" BorderBrush="#F39C12" BorderThickness="2">
+                            <StackPanel Spacing="8">
+                                <TextBlock FontSize="20" FontWeight="Bold" Foreground="#000000"
+                                          Text="{Binding SelectedCombatSpell.Name}" />
+                                <StackPanel Spacing="2">
+                                    <TextBlock FontSize="14" Opacity="0.8" Foreground="#000000">
+                                        <Run Text="Puissance: ⚡ " />
+                                        <Run Text="{Binding SelectedCombatSpell.Damage}" />
+                                    </TextBlock>
+                                </StackPanel>
+                                <TextBlock FontSize="13" 
+                                          TextWrapping="Wrap"
+                                          Foreground="#000000"
+                                          LineHeight="1.5"
+                                          Text="{Binding SelectedCombatSpell.Description}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Button Height="60"
+                               Content="🎯 LANCER LE SORT!"
+                               Command="{Binding AttackCommand}"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Background="#27AE60"
+                               Foreground="#000000"
+                               CornerRadius="8" />
+
+                        <Border Background="#BDC3C7" Padding="12" CornerRadius="8">
+                            <TextBlock FontSize="12" 
+                                      Foreground="#000000"
+                                      TextWrapping="Wrap"
+                                      LineHeight="1.6">
+                                Chaque sort a une puissance différente. Choisis stratégiquement pour vaincre l'ennemi avant que tu ne sois vaincu!
+                            </TextBlock>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</Window>
