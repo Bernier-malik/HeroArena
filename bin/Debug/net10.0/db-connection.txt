@@ -1,0 +1,1 @@
+Server=localhost,1433;Database=ExerciceHero;User Id=sa;Password=Your_password123;TrustServerCertificate=True;

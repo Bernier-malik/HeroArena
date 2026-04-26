@@ -26,6 +26,9 @@ build_property.EnableCodeStyleSeverity =
 [/home/malik/Documents/cours/b2/C\#/HeroArena/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[/home/malik/Documents/cours/b2/C\#/HeroArena/Styles/ThemeResources.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [/home/malik/Documents/cours/b2/C\#/HeroArena/Views/login.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 

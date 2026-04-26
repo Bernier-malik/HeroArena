@@ -2,45 +2,121 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:CompileBindings="False"
+        mc:Ignorable="d"
         x:Class="HeroArena.Login"
         Width="420"
-        Height="520"
-        Title="HeroArena - Login">
-    <Border Padding="28">
-        <StackPanel VerticalAlignment="Center"
-                    Spacing="14">
-            <TextBlock HorizontalAlignment="Center"
-                       FontSize="28"
-                       FontWeight="Bold"
-                       Text="HeroArena" />
-            <TextBlock HorizontalAlignment="Center"
-                       Opacity="0.8"
-                       Text="Connecte-toi pour continuer" />
-            <TextBlock HorizontalAlignment="Center"
-                       FontSize="12"
-                       Opacity="0.7"
-                       Text="Compte par defaut: admin / admin123" />
+        Height="560"
+        Title="HeroArena - Connexion"
+        Background="#F3F4F6">
 
-            <TextBlock Margin="0,12,0,0"
-                       Text="Nom d'utilisateur" />
-            <TextBox x:Name="UsernameTextBox"
-                     PlaceholderText="Entre ton nom" />
+    <Window.Styles>
+        <Style Selector="TextBox:focus">
+            <Setter Property="Background" Value="#F9FAFB" />
+            <Setter Property="BorderBrush" Value="#2563EB" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="#000000" />
+        </Style>
+        <Style Selector="TextBox:pointerover">
+            <Setter Property="Background" Value="#F9FAFB" />
+        </Style>
+    </Window.Styles>
 
-            <TextBlock Text="Mot de passe" />
-            <TextBox x:Name="PasswordTextBox"
-                     PasswordChar="*"
-                     PlaceholderText="Entre ton mot de passe" />
+    <Grid>
+        <Border Background="#FFFFFF"
+                CornerRadius="16"
+                Padding="30"
+                Margin="20"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                BorderBrush="#E5E7EB"
+                BorderThickness="1">
+            <StackPanel Spacing="18">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="HeroArena"
+                               FontSize="30"
+                               FontWeight="Bold"
+                               Foreground="#111827"
+                               HorizontalAlignment="Center" />
+                    <TextBlock Text="Connexion"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Foreground="#374151"
+                               HorizontalAlignment="Center" />
+                    <TextBlock Text="Connecte-toi pour accéder à l’arène"
+                               FontSize="12"
+                               Opacity="0.75"
+                               Foreground="#6B7280"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap" />
+                </StackPanel>
 
-            <TextBlock x:Name="ErrorText"
-                       Foreground="Red"
-                       IsVisible="False"
-                       Text="" />
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Nom d'utilisateur"
+                               FontSize="12"
+                               FontWeight="Bold"
+                               Foreground="#111827" />
+                    <TextBox Text="{Binding Username}"
+                             PlaceholderText="admin"
+                             Padding="10"
+                             FontSize="14"
+                             Foreground="#000000"
+                             Background="#F9FAFB"
+                             BorderBrush="#D1D5DB"
+                             BorderThickness="1"
+                             CornerRadius="8" />
+                </StackPanel>
 
-            <Button Margin="0,8,0,0"
-                    HorizontalAlignment="Stretch"
-                    Content="Se connecter"
-                    Click="GoToMain_Click" />
-        </StackPanel>
-    </Border>
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Mot de passe"
+                               FontSize="12"
+                               FontWeight="Bold"
+                               Foreground="#111827" />
+                    <TextBox Text="{Binding Password}"
+                             PasswordChar="*"
+                             PlaceholderText="••••••••"
+                             Padding="10"
+                             FontSize="14"
+                             Foreground="#000000"
+                             Background="#F9FAFB"
+                             BorderBrush="#D1D5DB"
+                             BorderThickness="1"
+                             CornerRadius="8" />
+                </StackPanel>
+
+                <Border IsVisible="{Binding HasError}"
+                        Background="#FEE2E2"
+                        CornerRadius="8"
+                        Padding="10">
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               Foreground="#991B1B"
+                               FontSize="12"
+                               TextWrapping="Wrap" />
+                </Border>
+
+                <Button Content="Se connecter"
+                        Command="{Binding LoginCommand}"
+                        Height="45"
+                        Background="#2563EB"
+                        Foreground="#FFFFFF"
+                        FontWeight="Bold"
+                        CornerRadius="10" />
+
+                <Button Content="Créer un compte"
+                        Command="{Binding RegisterCommand}"
+                        Height="45"
+                        Background="#E5E7EB"
+                        Foreground="#111827"
+                        FontWeight="Bold"
+                        CornerRadius="10" />
+
+                <TextBlock Text="Compte de démo : admin / admin123"
+                           FontSize="12"
+                           Opacity="0.7"
+                           Foreground="#4B5563"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+    </Grid>
 </Window>

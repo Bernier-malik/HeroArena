@@ -29,29 +29,55 @@ public static class DatabaseInitializer
 
             var player = new PlayerEntity
             {
-                Name = "Player1",
+                Name = "Malik",
                 Login = login
             };
 
-            var warrior = new HeroEntity { Name = "Warrior", Health = 120 };
-            var mage = new HeroEntity { Name = "Mage", Health = 90 };
+            // Trois champions legendaires de l'arene
+            var krogar = new HeroEntity { Name = "Krogar l'Invincible", Health = 130 };
+            var lyra = new HeroEntity { Name = "Lyra la Mage Noire", Health = 85 };
+            var silas = new HeroEntity { Name = "Silas l'Ombre", Health = 105 };
 
-            var slash = new SpellEntity { Name = "Slash", Damage = 20, Description = "Attaque de base du guerrier." };
-            var shieldBash = new SpellEntity { Name = "Shield Bash", Damage = 15, Description = "Coup de bouclier qui etourdit." };
-            var fireball = new SpellEntity { Name = "Fireball", Damage = 28, Description = "Boule de feu puissante." };
-            var frostBolt = new SpellEntity { Name = "Frost Bolt", Damage = 18, Description = "Projectile de glace." };
+            // Techniques du guerrier Krogar - puissant mais lent
+            var coupTonnerre = new SpellEntity { Name = "Coup de Tonnerre", Damage = 22, Description = "Une frappe colossale qui secoue la terre." };
+            var rueeSauvage = new SpellEntity { Name = "Ruee Sauvage", Damage = 16, Description = "Charge furieuse en avant." };
+            var bouclierPierre = new SpellEntity { Name = "Bouclier de Pierre", Damage = 14, Description = "Protege et contre-attaque." };
+            var trancheeFinale = new SpellEntity { Name = "Tranchee Finale", Damage = 28, Description = "Le coup qui decider d'une bataille." };
+
+            // Sorts de Lyra - equilibree entre puissance et vitesse
+            var eclairMagique = new SpellEntity { Name = "Eclair Magique", Damage = 26, Description = "Un rayon d'energie pure jaillit du ciel." };
+            var tempeteGivre = new SpellEntity { Name = "Tempete de Givre", Damage = 19, Description = "Ralentit l'ennemi avec des cristaux glacés." };
+            var chainesEtherees = new SpellEntity { Name = "Chaines Etherees", Damage = 23, Description = "Des liens magiques entravant l'adversaire." };
+            var explosionStelaire = new SpellEntity { Name = "Explosion Stellaire", Damage = 31, Description = "Concentre toute la puissance des etoiles en un point." };
+
+            // Techniques sournoise de Silas - rapide et letale
+            var estocAssassin = new SpellEntity { Name = "Estoc Assassin", Damage = 18, Description = "Coup precis au point faible." };
+            var poisonVirulent = new SpellEntity { Name = "Poison Virulent", Damage = 15, Description = "Lame trempee dans un venin ancien." };
+            var evanouissement = new SpellEntity { Name = "Evanouissement", Damage = 13, Description = "Disprait dans les ombres." };
+            var frappeFatale = new SpellEntity { Name = "Frappe Fatale", Damage = 32, Description = "Une attaque qui doit ecraser lors du premier coup." };
 
             db.Players.Add(player);
-            db.Heroes.AddRange(warrior, mage);
-            db.Spells.AddRange(slash, shieldBash, fireball, frostBolt);
+            db.Heroes.AddRange(krogar, lyra, silas);
+            db.Spells.AddRange(
+                coupTonnerre, rueeSauvage, bouclierPierre, trancheeFinale,
+                eclairMagique, tempeteGivre, chainesEtherees, explosionStelaire,
+                estocAssassin, poisonVirulent, evanouissement, frappeFatale);
             db.SaveChanges();
 
-            db.PlayerHeroes.Add(new PlayerHeroEntity { PlayerId = player.Id, HeroId = warrior.Id });
+            db.PlayerHeroes.Add(new PlayerHeroEntity { PlayerId = player.Id, HeroId = krogar.Id });
             db.HeroSpells.AddRange(
-                new HeroSpellEntity { HeroId = warrior.Id, SpellId = slash.Id },
-                new HeroSpellEntity { HeroId = warrior.Id, SpellId = shieldBash.Id },
-                new HeroSpellEntity { HeroId = mage.Id, SpellId = fireball.Id },
-                new HeroSpellEntity { HeroId = mage.Id, SpellId = frostBolt.Id }
+                new HeroSpellEntity { HeroId = krogar.Id, SpellId = coupTonnerre.Id },
+                new HeroSpellEntity { HeroId = krogar.Id, SpellId = rueeSauvage.Id },
+                new HeroSpellEntity { HeroId = krogar.Id, SpellId = bouclierPierre.Id },
+                new HeroSpellEntity { HeroId = krogar.Id, SpellId = trancheeFinale.Id },
+                new HeroSpellEntity { HeroId = lyra.Id, SpellId = eclairMagique.Id },
+                new HeroSpellEntity { HeroId = lyra.Id, SpellId = tempeteGivre.Id },
+                new HeroSpellEntity { HeroId = lyra.Id, SpellId = chainesEtherees.Id },
+                new HeroSpellEntity { HeroId = lyra.Id, SpellId = explosionStelaire.Id },
+                new HeroSpellEntity { HeroId = silas.Id, SpellId = estocAssassin.Id },
+                new HeroSpellEntity { HeroId = silas.Id, SpellId = poisonVirulent.Id },
+                new HeroSpellEntity { HeroId = silas.Id, SpellId = evanouissement.Id },
+                new HeroSpellEntity { HeroId = silas.Id, SpellId = frappeFatale.Id }
             );
             db.SaveChanges();
         }
